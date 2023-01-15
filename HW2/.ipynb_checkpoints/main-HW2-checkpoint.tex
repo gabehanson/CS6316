@@ -1,0 +1,69 @@
+
+
+\documentclass[10pt]{article}
+
+\usepackage{graphicx}
+\usepackage{fancybox}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{bm}
+\usepackage[]{algorithm2e}
+\usepackage{color}
+
+\input{mydef}
+
+\parskip 2.0mm
+\topmargin  -2.0cm
+\textwidth 16cm
+\textheight 22.5cm
+\topmargin -1.5cm
+\oddsidemargin 0mm
+
+\title{Homework 02: The Bias-variance Tradeoff, SVMs and Kernel Methods}
+\author{CS 6316 Machine Learning}
+\date{Due on Oct. 27, 2022 11:59 PM}
+
+% ***************************************************
+\begin{document} 
+\maketitle
+
+\begin{enumerate}
+\item \textbf{Bias-Variance Tradeoff} (12 points)
+
+Please refer to the attached iPython notebook file.
+
+\item \textbf{KKT Conditions} (4 points) The Lagrangian form of SVMs with slack variable $\vec{\xi}$ is formulated as
+  \begin{equation}
+    \label{eq:non-sep-svm}
+    \begin{split}
+      L(\vw,b,\bm{\xi},\bm{\alpha},\bm{\beta})= & \frac{1}{2}\|\vw\|_2^2 + C\sum_{i=1}^{m}\xi_i\\
+      & -\sum_{i=1}^{m}\alpha_i(y_i(\trans{\vw}\vx_i+b)-1+\xi_i)\\
+      & - \sum_{i=1}^{m}\beta_i\xi_i
+    \end{split}
+  \end{equation}
+  Similar to SVMs in separable cases (page 19), to find the KKT conditions (as in page 29, we need to compute the derivative with respect to all parameters $\{\vw,b,\bm{\xi},\bm{\alpha},\bm{\beta}\}$. Overall, please show that the KKT conditions can be represented to the following equations
+  \begin{eqnarray}
+    \vw &=& \sum_{i=1}^{m}{\alpha_i}y_i\vx_i\\
+    \sum_{i=1}^{m}\alpha_iy_i &=& 0 \\
+    \alpha_i + \beta_i &=& C\\
+    \alpha_i = 0 &\text{or}& y_i(\trans{\vw}\vx_i + b) = 1 - \xi_i\\
+    \beta_i = 0 &\text{or}& \xi_i = 0
+  \end{eqnarray}
+\item \textbf{Kernel Methods} (4 points) In our lecture, we show that a special case of the polynomial kernels
+  \begin{equation}
+    K(\vx,\vx') = (\dotp{\vx}{\vx'} + c)^d
+  \end{equation}
+  with $d=2$ and $\vx,\vx'\in\mathbb{R}^2$.
+  On page 53 of the slides, we should how this special case can be decomposed as a dot product with a nonlinear mapping $\Phi(\cdot)$
+  \begin{equation}
+    K(\vx,\vx') = \dotp{\Phi(\vx)}{\Phi(\vx')}.
+  \end{equation}
+  In this problem, consider $d=3$ with $\vx,\vx'\in\mathbb{R}^2$ and show how the $\Phi(\vx)$ is defined in this case. 
+\end{enumerate}
+
+% *******************END OF DOCUMENT*****************
+\end{document}
+

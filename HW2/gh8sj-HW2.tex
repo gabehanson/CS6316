@@ -1,0 +1,130 @@
+
+
+\documentclass[10pt]{article}
+
+\usepackage{graphicx}
+\usepackage{fancybox}
+\usepackage{epsfig}
+\usepackage{float}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{bm}
+\usepackage[]{algorithm2e}
+\usepackage{color}
+
+\input{mydef}
+
+\parskip 2.0mm
+\topmargin  -2.0cm
+\textwidth 16cm
+\textheight 22.5cm
+\topmargin -1.5cm
+\oddsidemargin 0mm
+
+\title{CS6316 Homework 02: The Bias-variance Tradeoff, SVMs and Kernel Methods}
+\author{Gabriel Hanson}
+\date{Due on Oct. 27, 2022 11:59 PM}
+
+% ***************************************************
+\begin{document} 
+\maketitle
+
+\begin{enumerate}
+\item \textbf{Bias-Variance Tradeoff} (12 points)
+
+Please refer to the attached iPython notebook file.
+
+\pagebreak
+\item \textbf{KKT Conditions} (4 points) The Lagrangian form of SVMs with slack variable $\vec{\xi}$ is formulated as
+  \begin{equation}
+    \label{eq:non-sep-svm}
+    \begin{split}
+      L(\vw,b,\bm{\xi},\bm{\alpha},\bm{\beta})= & \frac{1}{2}\|\vw\|_2^2 + C\sum_{i=1}^{m}\xi_i\\
+      & -\sum_{i=1}^{m}\alpha_i(y_i(\trans{\vw}\vx_i+b)-1+\xi_i)\\
+      & - \sum_{i=1}^{m}\beta_i\xi_i
+    \end{split}
+  \end{equation}
+  Similar to SVMs in separable cases (page 19), to find the KKT conditions (as in page 29, we need to compute the derivative with respect to all parameters $\{\vw,b,\bm{\xi},\bm{\alpha},\bm{\beta}\}$. Overall, please show that the KKT conditions can be represented to the following equations
+  \begin{eqnarray}
+    \vw &=& \sum_{i=1}^{m}{\alpha_i}y_i\vx_i\\
+    \sum_{i=1}^{m}\alpha_iy_i &=& 0 \\
+    \alpha_i + \beta_i &=& C\\
+    \alpha_i = 0 &\text{or}& y_i(\trans{\vw}\vx_i + b) = 1 - \xi_i\\
+    \beta_i = 0 &\text{or}& \xi_i = 0
+  \end{eqnarray}
+\hspace{\parindent}\textit{\textbf{Solution:}}
+
+$$  \frac{\partial L}{\partial \vw} = \vw - \sum_{i=1}^{m} \alpha_i y_i x_i  = 0 \quad \quad \longrightarrow  \quad \vw = \sum_{i=1}^{m} \alpha_i y_i x_i $$
+
+$$ \frac{\partial L}{\partial b} = - \sum_{i=1}^{m} \alpha_i y_i = 0 \quad \quad \longrightarrow \quad \alpha_i y_i = 0  $$
+
+$$ \frac{\partial L}{\partial {\xi}}  = C - \sum_{i=1}^{m} \alpha_i - \sum_{i=1}^{m} \beta_i = 0 \quad \quad \longrightarrow \quad C = \alpha_i + \beta_i $$
+
+and 
+
+$$ \forall i \quad \alpha_i(y_i(\vw^\intercal \vx_i + b) -1 + \xi_i = 0 \quad \quad \longrightarrow \quad \quad \alpha_i = 0 \quad \text{or} \quad y_i(\vw^\intercal \vx_i + b) = 1 - \xi_i  $$
+
+$$ \forall i \quad \beta_i\xi_i = 0 \quad \quad \longrightarrow \quad \quad \beta_i = 0 \quad \text{or} \quad \xi_i = 0 $$
+
+
+\pagebreak
+\item \textbf{Kernel Methods} (4 points) In our lecture, we show that a special case of the polynomial kernels
+  \begin{equation}
+    K(\vx,\vx') = (\dotp{\vx}{\vx'} + c)^d
+  \end{equation}
+  with $d=2$ and $\vx,\vx'\in\mathbb{R}^2$.
+  On page 53 of the slides, we should how this special case can be decomposed as a dot product with a nonlinear mapping $\Phi(\cdot)$
+  \begin{equation}
+    K(\vx,\vx') = \dotp{\Phi(\vx)}{\Phi(\vx')}.
+  \end{equation}
+  In this problem, consider $d=3$ with $\vx,\vx'\in\mathbb{R}^2$ and show how the $\Phi(\vx)$ is defined in this case. 
+\end{enumerate}
+
+\hspace{\parindent}\textit{\textbf{Solution:}}
+
+$$ K(\vx,\vx') = (\dotp{\vx}{\vx'} + c)^3 \;\forall \  x,x^\prime \in\mathbb{R}^2 $$
+$$ K(\vx,\vx') = (\dotp{\vx}{\vx'} + c)^2 * (\dotp{\vx}{\vx'} + c) $$
+$$ = ({x_1}{x_1'}  + {x_2}{x_2'}  + c)^2 * ({x_1}{x_1'}  + {x_2}{x_2'}  + c)$$
+This first term was solved for in slide 56 of the SVM lecture, which I will substitute in here
+$$  = ({x_1^2}{x_1'^2} + {x_2^2}{x_2'^2}  +  2{x_1}{x_1'}{x_2}{x_2'}  + 2c{x_1}{x_1'} + 2c{x_2}{x_2'}+c^2 )* ({x_1}{x_1'}  + {x_2}{x_2'}  + c)$$
+$$ = ({x_1^3}{x_1'^3} + {x_1}{x_1'}{x_2^2}{x_2'^2} + 2{x_1^2}{x_1'^2}{x_2}{x_2'} +  2c{x_1^2}{x_1'^2} + 2c{x_1}{x_1'}{x_2}{x_2'} + c^2 {x_1}{x_1'} $$
+$$ + \; {x_1^2}{x_1'^2}{x_2}{x_2'} + {x_2^3}{x_2'^3} + 2{x_1}{x_1'}{x_2^2}{x_2'^2} + 2c{x_1}{x_1'}{x_2}{x_2'}  + 2c{x_2^2}{x_2'^2} + c^2 {x_2}{x_2'} $$
+$$ +  \;c{x_1^2}{x_1'^2} + c{x_2^2}{x_2'^2} + 2c{x_1}{x_1'}{x_2}{x_2'} + 2c^2{x_1}{x_1'} + 2c^2{x_2}{x_2'} + c^3 )$$
+Combining terms here leaves us with
+$$ = ({x_1^3}{x_1'^3} + {x_2^3}{x_2'^3}  + 3{x_1^2}{x_1'^2}{x_2}{x_2'} + 3{x_1}{x_1'}{x_2^2}{x_2'^2} + 3 c{x_1^2}{x_1'^2} +  3c{x_2^2}{x_2'^2} + 6c{x_1}{x_1'}{x_2}{x_2'} + 3c^2{x_1}{x_1'} + 3c^2{x_2}{x_2'} + c^3 ) $$
+which can be rewritten as
+
+\def\A{
+\begin{bmatrix}
+    {x_1^3} , {x_2^3} , {\sqrt{3}{x_1^2}x_2} , {\sqrt{3}{x_1}x_2^2} , {\sqrt{3c}x_1^2} , {\sqrt{3c}x_2^2} ,{\sqrt{6c}{x_1}x_2} , {\sqrt{3}cx_1} ,  {\sqrt{3}cx_2} , c^{3/2}
+\end{bmatrix}}
+
+\def\B{
+\begin{bmatrix}
+	x_1'^3 \\
+     	x_2'^3 \\
+    	\sqrt{3}{x_1'^2}x_2' \\
+	\sqrt{3}{x_1'}x_2'^2 \\
+        	\sqrt{3c}x_1'^2 \\
+	\sqrt{3c}x_2'^2 \\
+	\sqrt{6c}{x_1'}x_2' \\
+	\sqrt{3}cx_1' \\
+	\sqrt{3}cx_2' \\
+	c^{3/2}
+\end{bmatrix}}
+
+
+\begin{align*}
+\A \B
+\end{align*}
+
+
+
+Let \( K(\vx,\vx') = \dotp{\phi(\vx)}{\phi(\vx')} \), then
+
+$$ \phi(\vx)  = [ {x_1^3} , {x_2^3} , {\sqrt{3}{x_1^2}x_2} , {\sqrt{3}{x_1}x_2^2} , {\sqrt{3c}x_1^2} , {\sqrt{3c}x_2^2} ,{\sqrt{6c}{x_1}x_2} , {\sqrt{3}cx_1} ,  {\sqrt{3}cx_2} , c^{3/2}]^\intercal $$ 
+
+% *******************END OF DOCUMENT*****************
+\end{document}
+
